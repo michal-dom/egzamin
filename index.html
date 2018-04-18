@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="css/FontsStyle.css" type="text/css" rel="stylesheet">
+    <style>
+
+        body,html{
+            font-family: "Lato Hairline";
+            font-size: 24px;
+            /*alignment: ;*/
+            padding-top: 20px;
+        }
+
+        #content{
+            width: 640px;
+            background-color: #ECEFF1;
+        }
+        div{
+            padding: 20px;
+        }
+        #quest{
+            background-color: #CFD8DC;
+            border-bottom: solid 1px #37474F;
+        }
+        #content{
+
+            margin: auto;
+            text-align: left;
+        }
+        #reload{
+            text-align: center;
+        }
+        #reload span{
+            border: solid 1px #37474F;
+            padding: 10px;
+        }
+        #reload span:hover{
+            cursor: pointer;
+        }
+
+
+
+
+    </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function(){
+
+            loadQuestion();
+            $("#reload").click(function () {
+                loadQuestion();
+                $(".ans").css("background-color", "#ECEFF1");
+            })
+        });
+
+        function setOnCheckListener() {
+            $("input").click(function () {
+                cls = $(this).attr("class");
+                if($(this).val() == "true"){
+                    $("."+cls).css("background-color", "mediumseagreen");
+                    setTimeout(function(){
+                        loadQuestion();
+                        $(".ans").css("background-color", "#ECEFF1");
+                    }, 2000);
+                } else {
+                    $("."+cls).css("background-color", "crimson");
+                }
+            })
+        }
+
+        function loadQuestion() {
+            $.ajax({
+                url: "php/controller/IndexController.php",
+                type: "POST",
+                dataType: "json",
+                data: {
+                    opt: 1
+                }
+            }).done(function (data) {
+                v = data[0];
+                $("#quest").html(v['question']);
+
+                var arr = ["ans-1", "ans-2", "ans-3", "ans-4"];
+                arr = shuffle(arr);
+                $("."+arr[0]).html(generateAns(data[1], arr[0]));
+                $("."+arr[1]).html(generateAns(data[2], arr[1]));
+                $("."+arr[2]).html(generateAns(data[3], arr[2]));
+                $("."+arr[3]).html(generateAns(data[4], arr[3]));
+                setOnCheckListener();
+            });
+        }
+
+        function generateAns(v, str){
+            return "<input type='radio' name='answer' value='"+v['type']+"' id='rad-1' class='"+str+"' > "+v['answer'];
+        }
+        function shuffle(array) {
+            var currentIndex = array.length, temporaryValue, randomIndex;
+            while (0 !== currentIndex) {
+                randomIndex = Math.floor(Math.random() * currentIndex);
+                currentIndex -= 1;
+                temporaryValue = array[currentIndex];
+                array[currentIndex] = array[randomIndex];
+                array[randomIndex] = temporaryValue;
+            }
+            return array;
+        }
+    </script>
+
+</head>
+<body>
+
+
+<form id="content">
+    <div id="quest">...</div>
+    <!--<br>-->
+    <div id="div-1" class="ans-1 ans"><input type="radio" name="answer" value="true" id="rad-1" class="ans-1" > ...</div>
+    <div id="div-2" class="ans-2 ans"><input type="radio" name="answer" value="false" id="rad-2" class="ans-2"> ...</div>
+    <div id="div-3" class="ans-3 ans"><input type="radio" name="answer" value="false" id="rad-3" class="ans-3"> ...</div>
+    <div id="div-4" class="ans-4 ans"><input type="radio" name="answer" value="false" id="rad-4" class="ans-4"> ...</div>
+    <div id="reload"><span>Inne pytanie</span></div>
+</form>
+
+</body>
+</html>

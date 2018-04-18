@@ -1,0 +1,16 @@
+/*Lato*/
+
+@font-face {
+    font-family: "Lato HairLine";
+    src: url('../fonts/Lato-Hairline.WOFF'), url('../fonts/Lato-Hairline.WOFF') format('woff');
+}
+
+@font-face {
+    font-family: "Lato Light";
+    src: url('../fonts/Lato-Light.WOFF'), url('../fonts/Lato-Light.WOFF') format('woff');
+}
+
+@font-face {
+    font-family: "Lato Regular";
+    src: url('../fonts/Lato-Regular.WOFF'), url('../fonts/Lato-Regular.WOFF') format('woff');
+}
